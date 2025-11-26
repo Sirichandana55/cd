@@ -1,0 +1,70 @@
+9)Write a ‘C’ program to implement lexical analyzer using c program. 
+#include <stdio.h>
+#include <ctype.h>
+#include <string.h>
+
+int isDelimiter(char ch) {
+    return (ch == ' ' || ch == '+' || ch == '-' || ch == '*' || ch == '/' ||
+            ch == ',' || ch == ';' || ch == '(' || ch == ')' ||
+            ch == '{' || ch == '}' || ch == '=');
+}
+
+int isOperator(char ch) {
+    return (ch == '+' || ch == '-' || ch == '*' || ch == '/' || ch == '=');
+}
+
+int isKeyword(char *str) {
+    char keywords[][10] = {"if", "else", "while", "for", "int", "float", "char", "return"};
+    for (int i = 0; i < 8; i++)
+        if (strcmp(str, keywords[i]) == 0)
+            return 1;
+    return 0;
+}
+
+int isIdentifier(char *str) {
+    if (!isalpha(str[0]) && str[0] != '_')
+        return 0;
+    for (int i = 1; str[i] != '\0'; i++)
+        if (!isalnum(str[i]) && str[i] != '_')
+            return 0;
+    return 1;
+}
+
+int isNumber(char *str) {
+    for (int i = 0; str[i] != '\0'; i++)
+        if (!isdigit(str[i]))
+            return 0;
+    return 1;
+}
+
+int main() {
+    char str[100], token[20];
+    printf("Enter code: ");
+    fgets(str, sizeof(str), stdin);
+
+    int i = 0, j = 0;
+    while (str[i] != '\0') {
+        if (isDelimiter(str[i])) {
+            if (j != 0) {
+                token[j] = '\0';
+                if (isKeyword(token)) printf("Keyword: %s\n", token);
+                else if (isNumber(token)) printf("Number: %s\n", token);
+                else if (isIdentifier(token)) printf("Identifier: %s\n", token);
+                else printf("Unknown: %s\n", token);
+                j = 0;
+            }
+            if (isOperator(str[i])) printf("Operator: %c\n", str[i]);
+        } else token[j++] = str[i];
+        i++;
+    }
+    return 0;
+}
+
+
+
+input 
+
+int x = 25 + y;
+
+
+
