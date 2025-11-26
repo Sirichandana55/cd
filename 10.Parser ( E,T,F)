@@ -1,0 +1,36 @@
+
+10) write recursive descent parser for the grammar E->E+T E->T T->T*F T->F 
+F->(E)/id. 
+
+
+#include <stdio.h>
+#include <string.h>
+
+char s[50]; int i=0;
+
+void E(); void T(); void F();
+
+void E() { T(); while(s[i]=='+'){ i++; T(); } }
+void T() { F(); while(s[i]=='*'){ i++; F(); } }
+void F() {
+    if(s[i]=='('){ i++; E(); if(s[i]==')') i++; else printf("Missing )\n"); }
+    else if(s[i]=='i' && s[i+1]=='d'){ i+=2; }
+    else printf("Error at %c\n",s[i]);
+}
+
+int main() {
+    printf("Enter expr (use 'id' for identifiers): ");
+    scanf("%s", s);
+    E();
+    if(s[i]=='\0') printf("Valid Expression\n");
+    else printf("Invalid Expression\n");
+}
+
+
+
+
+input
+	1)id+id*id
+
+
+	2)a+b
