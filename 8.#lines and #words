@@ -1,0 +1,38 @@
+8) Write a lex program to count the number of words and number of lines in a given file or program. 
+
+lexical.l
+
+
+%{
+#include <stdio.h>
+int lines = 0, words = 0;
+%}
+
+%%
+\n          { lines++; }
+[ \t]+      ;                     
+[^ \t\n]+   { words++; }         
+%%
+
+int main() {
+    yylex();
+    printf("\nTotal Lines: %d\nTotal Words: %d\n", lines, words);
+    return 0;
+}
+
+int yywrap() { return 1; }
+
+
+
+input.txt
+
+Hello world
+This is Lex
+
+
+
+
+execution 
+			flex lexical.l
+			gcc lex.yy.c 
+			./a.out < input.txt
