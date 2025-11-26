@@ -1,0 +1,86 @@
+4)Generate a yacc specification for a few syntactic categories.  
+a) Program to recognise a valid arithmetic expression that uses operators +,-, * and /.  
+b) Program to recognise a valid variable which starts with a letter followed by any number 
+of letters or digits. 
+c) Implementation of a calculator using lex and yacc
+			&
+14)Write a YACC program to evaluate algebraic expression. 
+
+calc.l
+	
+
+
+%{
+#include "calc.tab.h"
+#include <stdio.h>
+#include <stdlib.h>
+%}
+
+%%
+[0-9]+              { yylval = atoi(yytext); return NUMBER; }
+[a-zA-Z][a-zA-Z0-9]* { return VARIABLE; }
+[+\-*/()\n]         { return yytext[0]; }
+[ \t]               ;
+.                   { return yytext[0]; }
+%%
+int yywrap() { return 1; }
+
+
+calc.y
+
+
+%{
+#include <stdio.h>
+#include <stdlib.h>
+
+int yylex();
+int yyerror(char *s);
+extern char *yytext;   
+%}
+
+%token NUMBER VARIABLE
+%left '+' '-'
+%left '*' '/'
+
+%%
+input:
+    /* empty */
+  | input expr '\n'   { printf("Result = %d\n", $2); }
+  | input var '\n'    { printf("Valid variable: %s\n", yytext); }
+  ;
+
+expr:
+      expr '+' expr   { $$ = $1 + $3; }
+    | expr '-' expr   { $$ = $1 - $3; }
+    | expr '*' expr   { $$ = $1 * $3; }
+    | expr '/' expr   { $$ = $3 ? $1 / $3 : 0; }
+    | '(' expr ')'    { $$ = $2; }
+    | NUMBER          { $$ = $1; }
+    ;
+
+var:
+    VARIABLE          { printf("Recognized variable: %s\n", yytext); }
+    ;
+%%
+int main() {
+    printf("Enter expressions or variable names (Ctrl+D to stop):\n");
+    yyparse();
+    return 0;
+}
+
+int yyerror(char *s) {
+    printf("Invalid Expression\n");
+    return 0;
+}
+
+
+
+execution           	flex calc.l
+			bison -d calc.y
+			gcc lex.yy.c calc.tab.c 
+			./a.out
+
+
+input 
+	(2+3)*5
+
