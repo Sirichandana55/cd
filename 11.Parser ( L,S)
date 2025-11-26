@@ -1,0 +1,41 @@
+11) Write a recursive descent parser for the grammar S->(L)    S->a 
+L->L,S   L->S 
+
+
+
+#include <stdio.h>
+#include <string.h>
+
+char s[50]; int i=0;
+
+void S(), L();
+
+void S() {
+    if(s[i]=='('){ i++; L(); if(s[i]==')') i++; else printf("Missing )\n"); }
+    else if(s[i]=='a') i++;
+    else printf("Error at %c\n", s[i]);
+}
+
+void L() {
+    S();
+    if(s[i]==','){ i++; L(); }
+}
+
+int main() {
+    printf("Enter string: ");
+    scanf("%s", s);
+    S();
+    if(s[i]=='\0') printf("Valid String\n");
+    else printf("Invalid String\n");
+    return 0;
+}
+
+
+
+
+input
+	1)(a,a)
+	
+
+	2) a,a)
+
