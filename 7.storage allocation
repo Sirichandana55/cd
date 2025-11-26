@@ -1,0 +1,33 @@
+7)Implement any one storage allocation strategies (heap, stack, static) 
+
+
+#include <stdio.h>
+#include <string.h>
+
+struct Frame {
+    char name[10];
+    int vars;
+} stack[10];
+
+int top = -1;
+
+void push(char *f, int v) {
+    strcpy(stack[++top].name, f);
+    stack[top].vars = v;
+    printf("Call: %s() -> %d vars allocated\n", f, v);
+}
+
+void pop() {
+    printf("Return: %s() -> %d vars freed\n", stack[top].name, stack[top].vars);
+    top--;
+}
+
+int main() {
+    push("main", 2);
+    push("funcA", 3);
+    push("funcB", 1);
+    pop();
+    pop();
+    pop();
+    return 0;
+}
