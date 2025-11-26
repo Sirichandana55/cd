@@ -1,0 +1,50 @@
+6. Implement type checking 
+
+#include <stdio.h>
+#include <ctype.h>
+
+int type(char *s) {
+    int i = 0, dot = 0;
+
+    while (s[i]) {
+        if (s[i] == '.') dot++;
+        else if (!isdigit(s[i])) return -1; 
+        i++;
+    }
+
+    if (dot > 1) return -1;
+    return (dot == 1) ? 1 : 0;      
+}
+
+int main() {
+    char a[20], op, b[20];
+    int t1, t2;
+
+    printf("Enter expression (example: 3 + 4.5):\n");
+    scanf("%s %c %s", a, &op, b);
+
+    t1 = type(a);
+    t2 = type(b);
+
+    if (t1 == -1 || t2 == -1) {
+        printf("Type Error: Invalid operands\n");
+        return 0;
+    }
+
+    if (op != '+' && op != '-' && op != '*' && op != '/') {
+        printf("Type Error: Invalid operator\n");
+        return 0;
+    }
+
+    if (t1 == 0 && t2 == 0) printf("Result Type: INT\n");
+    else printf("Result Type: FLOAT\n");
+
+    return 0;
+}
+
+
+input 
+	3+6
+	4.5 + 5.0
+	3 + 5.0
+
