@@ -1,0 +1,33 @@
+12) Write a C program to calculate the first function for the grammar 
+E->E+T  E->T   T->T*F  T->F     F->(E)/id 
+
+
+#include <stdio.h>
+
+void FIRST(char c);
+
+int main() {
+    char nonterminals[] = {'E', 'T', 'F'};
+    printf("FIRST sets:\n");
+    for (int i = 0; i < 3; i++) {
+        printf("FIRST(%c) = { ", nonterminals[i]);
+        FIRST(nonterminals[i]);
+        printf("}\n");
+    }
+    return 0;
+}
+
+void FIRST(char c) {
+    switch(c) {
+        case 'E':
+            printf("( , id"); 
+            break;
+        case 'T':
+            printf("( , id"); 
+            break;
+        case 'F':
+            printf("( , id"); 
+            break;
+    }
+}
+
